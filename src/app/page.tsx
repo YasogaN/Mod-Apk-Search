@@ -1,6 +1,6 @@
 'use client'
 import * as React from 'react';
-import { Button, Stack, Paper, TextField } from "@mui/material";
+import { Button, Stack, Paper, TextField, CircularProgress } from "@mui/material";
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,6 +12,7 @@ export default function Home() {
   const [querySent, setQuerySent] = React.useState(false);
   const [results, setResults] = React.useState<{ site: string; title: string; description: string; link: string; imageUrl: string; }[]>([]);
   const [query, setQuery] = React.useState<string>('');
+  const [loading, setLoading] = React.useState(false);
   const apiKey = 'AIzaSyDXKeNt5pt8sFJ8o5a_vMskIU6cJ7FRIl8';
 
   React.useEffect(() => {
@@ -21,6 +22,7 @@ export default function Home() {
   }, [pagenum, querySent]);
 
   const fetchResults = async () => {
+    setLoading(true);
     const response = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${apiKey}&cx=752437097efb4468f&q=${query}&start=${pagenum * 10}`);
     const data = await response.json();
     const results = data.items.map((result: any) => {
@@ -33,6 +35,7 @@ export default function Home() {
     });
     setResults(results || []);
     setQuerySent(results.length > 0);
+    setLoading(false);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -59,103 +62,110 @@ export default function Home() {
       }}
     >
       <Header />
+      {loading && (
+        <CircularProgress sx={{ marginTop: 10, color: '#1c4020' }} />
+      )}
+      {!loading && (
+        <>
 
-      {!querySent && (
-        <form onSubmit={handleSubmit}>
-          <Stack spacing={1} direction="row" alignItems="center" width='75vw'>
-            <TextField name="q" placeholder="What do you want to search for?" required fullWidth variant='outlined' size='small' hiddenLabel sx={{
-              backgroundColor: 'white',
-              borderRadius: '5px',
-              color: '#080909',
-            }} />
-            <Button type="submit" variant='contained' size="large" sx={{
-              backgroundColor: '#4338ca',
-              color: 'white',
-              borderRadius: '5px',
-              '&:hover': {
-                backgroundColor: '#185ea5',
-              }
-            }}><SearchIcon /></Button>
-          </Stack>
-        </form>
-      )
-      }
+          {!querySent && (
+            <form onSubmit={handleSubmit}>
+              <Stack spacing={1} direction="row" alignItems="center" width='75vw'>
+                <TextField name="q" placeholder="What do you want to search for?" required fullWidth variant='outlined' size='small' hiddenLabel sx={{
+                  backgroundColor: 'white',
+                  borderRadius: '5px',
+                  color: '#080909',
+                }} />
+                <Button type="submit" variant='contained' size="large" sx={{
+                  backgroundColor: '#4338ca',
+                  color: 'white',
+                  borderRadius: '5px',
+                  '&:hover': {
+                    backgroundColor: '#185ea5',
+                  }
+                }}><SearchIcon /></Button>
+              </Stack>
+            </form>
+          )
+          }
 
-      {
-        querySent && results.length > 0 && (
-          <>
-            <Button
-              variant="contained"
-              aria-label="Back to Search Button"
-              onClick={() => {
-                window.location.reload();
-              }}
-              sx={{
-                marginTop: 2,
-                color: 'white',
-                backgroundColor: '#1c4020',
-                '&:hover': {
-                  backgroundColor: '#1c3020',
-                }
-              }}
-            >
-              <ArrowLeft />Back to Search
-            </Button>
-            <Stack spacing={-3} direction="column" sx={{ marginTop: 2 }}>
-              {results.map((result, index) => (
-                <ResultCard key={index} {...result} />
-              ))}
-            </Stack>
-          </>
-        )
-      }
+          {
+            querySent && results.length > 0 && (
+              <>
+                <Button
+                  variant="contained"
+                  aria-label="Back to Search Button"
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                  sx={{
+                    marginTop: 2,
+                    color: 'white',
+                    backgroundColor: '#1c4020',
+                    '&:hover': {
+                      backgroundColor: '#1c3020',
+                    }
+                  }}
+                >
+                  <ArrowLeft />Back to Search
+                </Button>
+                <Stack spacing={-3} direction="column" sx={{ marginTop: 2 }}>
+                  {results.map((result, index) => (
+                    <ResultCard key={index} {...result} />
+                  ))}
+                </Stack>
+              </>
+            )
+          }
 
-      {
-        querySent && (
-          <Stack spacing={2} direction="row" sx={{ marginTop: 2, marginBottom: 4 }}>
-            <Button
-              variant="contained"
-              aria-label="Previous Page Button"
-              onClick={() => {
-                if (pagenum > 0) {
-                  setPagenum(pagenum - 1);
-                }
-              }}
-              disabled={pagenum === 0}
-              sx={{
-                marginTop: 2,
-                color: 'white',
-                backgroundColor: '#1c4020',
-                '&:hover': {
-                  backgroundColor: '#1c3020',
-                },
-                '&:disabled': {
-                  backgroundColor: '#1c2020',
-                }
-              }}
-            >
-              Previous Page
-            </Button>
-            <Button
-              variant="contained"
-              aria-label="Next Page Button"
-              onClick={() => {
-                setPagenum(pagenum + 1);
-              }}
-              sx={{
-                marginTop: 2,
-                color: 'white',
-                backgroundColor: '#1c4020',
-                '&:hover': {
-                  backgroundColor: '#1c3020',
-                }
-              }}
-            >
-              Next Page
-            </Button>
-          </Stack>
-        )
-      }
+          {
+            querySent && (
+              <Stack spacing={2} direction="row" sx={{ marginTop: 2, marginBottom: 4 }}>
+                <Button
+                  variant="contained"
+                  aria-label="Previous Page Button"
+                  onClick={() => {
+                    if (pagenum > 0) {
+                      setPagenum(pagenum - 1);
+                    }
+                  }}
+                  disabled={pagenum === 0}
+                  sx={{
+                    marginTop: 2,
+                    color: 'white',
+                    backgroundColor: '#1c4020',
+                    '&:hover': {
+                      backgroundColor: '#1c3020',
+                    },
+                    '&:disabled': {
+                      backgroundColor: '#1c2020',
+                    }
+                  }}
+                >
+                  Previous Page
+                </Button>
+                <Button
+                  variant="contained"
+                  aria-label="Next Page Button"
+                  onClick={() => {
+                    setPagenum(pagenum + 1);
+                  }}
+                  sx={{
+                    marginTop: 2,
+                    color: 'white',
+                    backgroundColor: '#1c4020',
+                    '&:hover': {
+                      backgroundColor: '#1c3020',
+                    }
+                  }}
+                >
+                  Next Page
+                </Button>
+              </Stack>
+            )
+          }
+        </>
+      )}
 
       <Footer />
     </Paper >
