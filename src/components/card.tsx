@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 
-export default function ResultCard({ site, title, description, link, imageUrl }: { site: string, title: string, description: string, link: string, imageUrl: string }) {
+export default function ResultCard({ site, title, description, link }: { site: string, title: string, description: string, link: string }) {
     return (
         <Link href={link} target="_blank">
             <Card sx={{ width: '75vw', margin: 2, backgroundColor: '#1c2020', maxHeigh: 120 }}>
@@ -18,12 +18,6 @@ export default function ResultCard({ site, title, description, link, imageUrl }:
                             alignItems: "center",
                         }}
                     >
-                        {imageUrl && (
-                            <img
-                                src={imageUrl}
-                                loading="lazy"
-                            />
-                        )}
                         <Stack
                             direction="column"
                             spacing={0}
@@ -32,13 +26,13 @@ export default function ResultCard({ site, title, description, link, imageUrl }:
                                 alignItems: "flex-start",
                             }}
                         >
-                            <Typography sx={{ color: 'white' }} variant="h5">
+                            <Typography sx={{ color: 'white' }} variant="h6">
                                 {title}
                             </Typography>
-                            <Typography sx={{ color: 'white' }} variant="h6">
+                            <Typography sx={{ color: 'white' }} variant="subtitle1">
                                 {site}
                             </Typography>
-                            <Typography sx={{ color: '#bdbdbd' }} variant="h6">
+                            <Typography sx={{ color: '#bdbdbd' }} variant="subtitle1">
                                 {description}
                             </Typography>
                         </Stack>
