@@ -12,25 +12,7 @@ export default function Home() {
   const [querySent, setQuerySent] = React.useState(false);
   const [results, setResults] = React.useState<{ site: string; title: string; description: string; link: string; imageUrl: string; }[]>([]);
   const [query, setQuery] = React.useState<string>('');
-  const [csetok, setCsetok] = React.useState<string>('');
-
-  React.useEffect(() => {
-    async function fetchScript() {
-      try {
-        const response = await fetch('https://corsmirror.com/v1?url=https://cse.google.com/cse.js?cx=752437097efb4468f');
-        const scriptText = await response.text();
-        const tokenMatch = scriptText.match(/"cse_token"\s*:\s*"([^"]+)"/);
-        if (tokenMatch && tokenMatch[1]) {
-          setCsetok(tokenMatch[1]);
-        } else {
-          console.error('cse_token not found.');
-        }
-      } catch (error) {
-        console.error('Error fetching the script:', error);
-      }
-    }
-    fetchScript();
-  }, []);
+  const apiKey = 'AIzaSyDXKeNt5pt8sFJ8o5a_vMskIU6cJ7FRIl8';
 
   React.useEffect(() => {
     if (querySent) {
@@ -39,21 +21,14 @@ export default function Home() {
   }, [pagenum, querySent]);
 
   const fetchResults = async () => {
-    const page = pagenum * 10;
-    const response = await fetch(`https://corsmirror.com/v1?url=https://cse.google.com/cse/element/v1?rsz=filtered_cse&num=10&hl=en&start=${page}&cx=752437097efb4468f&q=${query}&safe=off&cse_tok=${csetok}&callback=google.search.cse.api19695`);
-    const data = await response.text();
-    const cleaned = await data
-      .replace("/*O_o*/", "")
-      .replace("google.search.cse.api19695(", "")
-      .replace(/\);$/, "");
-    const json = JSON.parse(cleaned);
-    const results = json.results.map((result: any) => {
+    const response = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${apiKey}&cx=752437097efb4468f&q=${query}&start=${pagenum * 10}`);
+    const data = await response.json();
+    const results = data.items.map((result: any) => {
       return {
-        site: result.visibleUrl,
-        title: result.titleNoFormatting,
-        description: result.contentNoFormatting,
-        link: result.unescapedUrl,
-        imageUrl: result.richSnippet?.cseThumbnail?.src ?? '',
+        site: result.displayLink,
+        title: result.title,
+        description: result.snippet,
+        link: result.link,
       };
     });
     setResults(results || []);
