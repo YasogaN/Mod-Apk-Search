@@ -1,4 +1,4 @@
-import { extendTheme } from '@mui/joy/styles';
+import { extendTheme } from '@mui/material/styles';
 import { JetBrains_Mono, Source_Code_Pro } from 'next/font/google';
 
 const jb_mono = JetBrains_Mono({
@@ -18,21 +18,11 @@ const jb_mono = JetBrains_Mono({
 })
 
 const theme = extendTheme({
-  fontFamily: {
-    body: jb_mono.style.fontFamily,
-    display: jb_mono.style.fontFamily,
+  typography: {
+    fontFamily: jb_mono.style.fontFamily,
   },
   components: {
-    JoyButton: {
-      styleOverrides: {
-        root: ({ ownerState }) => ({
-          ...(ownerState.color === 'primary' && {
-            backgroundColor: '#4338ca',
-          }),
-        }),
-      },
-    },
-    JoyLink: {
+    MuiLink: {
       styleOverrides: {
         root: {
           color: '#66ff66',
@@ -43,7 +33,7 @@ const theme = extendTheme({
         },
       },
     },
-  },
+  }
 });
 
 export default theme;

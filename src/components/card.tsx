@@ -1,15 +1,14 @@
 import * as React from 'react';
-import AspectRatio from '@mui/joy/AspectRatio';
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import Typography from '@mui/joy/Typography';
-import Link from '@mui/joy/Link';
-import Stack from '@mui/joy/Stack';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
 
 export default function ResultCard({ site, title, description, link, imageUrl }: { site: string, title: string, description: string, link: string, imageUrl: string }) {
     return (
         <Link href={link} target="_blank">
-            <Card orientation="horizontal" variant="soft" sx={{ width: '75vw', margin: 2, backgroundColor: '#1c2020', maxHeigh: 120 }}>
+            <Card sx={{ width: '75vw', margin: 2, backgroundColor: '#1c2020', maxHeigh: 120 }}>
                 <CardContent>
                     <Stack
                         direction="row"
@@ -20,12 +19,10 @@ export default function ResultCard({ site, title, description, link, imageUrl }:
                         }}
                     >
                         {imageUrl && (
-                            <AspectRatio ratio="1" sx={{ width: 50, borderRadius: '10px', }}>
-                                <img
-                                    src={imageUrl}
-                                    loading="lazy"
-                                />
-                            </AspectRatio>
+                            <img
+                                src={imageUrl}
+                                loading="lazy"
+                            />
                         )}
                         <Stack
                             direction="column"
@@ -35,13 +32,13 @@ export default function ResultCard({ site, title, description, link, imageUrl }:
                                 alignItems: "flex-start",
                             }}
                         >
-                            <Typography textColor="common.white" level='title-md'>
+                            <Typography sx={{ color: 'white' }} variant="h5">
                                 {title}
                             </Typography>
-                            <Typography textColor="primary.plainColor" level="body-sm">
+                            <Typography sx={{ color: 'white' }} variant="h6">
                                 {site}
                             </Typography>
-                            <Typography textColor="#bdbdbd" level="body-xs">
+                            <Typography sx={{ color: '#bdbdbd' }} variant="h6">
                                 {description}
                             </Typography>
                         </Stack>

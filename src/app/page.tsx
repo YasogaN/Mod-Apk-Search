@@ -1,6 +1,6 @@
 'use client'
 import * as React from 'react';
-import { Button, Input, Stack, Sheet, Typography } from "@mui/joy";
+import { Button, Stack, Paper, TextField } from "@mui/material";
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import SearchIcon from '@mui/icons-material/Search';
@@ -17,7 +17,7 @@ export default function Home() {
   React.useEffect(() => {
     async function fetchScript() {
       try {
-        const response = await fetch('https://api.codetabs.com/v1/proxy/?quest=https://cse.google.com/cse.js?cx=752437097efb4468f');
+        const response = await fetch('https://corsmirror.com/v1?url=https://cse.google.com/cse.js?cx=752437097efb4468f');
         const scriptText = await response.text();
         const tokenMatch = scriptText.match(/"cse_token"\s*:\s*"([^"]+)"/);
         if (tokenMatch && tokenMatch[1]) {
@@ -40,21 +40,21 @@ export default function Home() {
 
   const fetchResults = async () => {
     const page = pagenum * 10;
-    const response = await fetch(`https://corsproxy.io/?https://cse.google.com/cse/element/v1?rsz=filtered_cse&num=10&hl=en&start=${page}&cx=752437097efb4468f&q=${query}&safe=off&cse_tok=${csetok}&callback=google.search.cse.api19695`);
+    const response = await fetch(`https://corsmirror.com/v1?url=https://cse.google.com/cse/element/v1?rsz=filtered_cse&num=10&hl=en&start=${page}&cx=752437097efb4468f&q=${query}&safe=off&cse_tok=${csetok}&callback=google.search.cse.api19695`);
     const data = await response.text();
     const cleaned = await data
-        .replace("/*O_o*/", "")
-        .replace("google.search.cse.api19695(", "")
-        .replace(/\);$/, "");
+      .replace("/*O_o*/", "")
+      .replace("google.search.cse.api19695(", "")
+      .replace(/\);$/, "");
     const json = JSON.parse(cleaned);
     const results = json.results.map((result: any) => {
-        return {
-            site: result.visibleUrl,
-            title: result.titleNoFormatting,
-            description: result.contentNoFormatting,
-            link: result.unescapedUrl,
-            imageUrl: result.richSnippet?.cseThumbnail?.src ?? '',
-        };
+      return {
+        site: result.visibleUrl,
+        title: result.titleNoFormatting,
+        description: result.contentNoFormatting,
+        link: result.unescapedUrl,
+        imageUrl: result.richSnippet?.cseThumbnail?.src ?? '',
+      };
     });
     setResults(results || []);
     setQuerySent(results.length > 0);
@@ -73,7 +73,7 @@ export default function Home() {
   };
 
   return (
-    <Sheet
+    <Paper
       sx={{
         display: 'flex',
         flexFlow: 'column',
@@ -88,45 +88,58 @@ export default function Home() {
       {!querySent && (
         <form onSubmit={handleSubmit}>
           <Stack spacing={1} direction="row" alignItems="center" width='75vw'>
-            <Input variant='outlined' name="q" placeholder="What do you want to search for?" required fullWidth />
-            <Button type="submit"><SearchIcon /></Button>
+            <TextField name="q" placeholder="What do you want to search for?" required fullWidth variant='outlined' size='small' hiddenLabel sx={{
+              backgroundColor: 'white',
+              borderRadius: '5px',
+              color: '#080909',
+            }} />
+            <Button type="submit" variant='contained' size="large" sx={{
+              backgroundColor: '#4338ca',
+              color: 'white',
+              borderRadius: '5px',
+              '&:hover': {
+                backgroundColor: '#185ea5',
+              }
+            }}><SearchIcon /></Button>
           </Stack>
         </form>
-      )}
-
-      {querySent && results.length > 0 && (
-        <>
-          <Button
-            variant="soft"
-            aria-label="Back to Search Button"
-            onClick={() => {
-              window.location.reload();
-            }}
-            sx={{
-              marginTop: 2,
-              color: 'white',
-              backgroundColor: '#1c4020',
-              '&:hover': {
-                backgroundColor: '#1c3020',
-              }
-            }}
-          >
-            <ArrowLeft />Back to Search
-          </Button>
-          <Stack spacing={-3} direction="column" sx={{ marginTop: 2 }}>
-            {results.map((result, index) => (
-              <ResultCard key={index} {...result} />
-            ))}
-          </Stack>
-        </>
       )
+      }
+
+      {
+        querySent && results.length > 0 && (
+          <>
+            <Button
+              variant="contained"
+              aria-label="Back to Search Button"
+              onClick={() => {
+                window.location.reload();
+              }}
+              sx={{
+                marginTop: 2,
+                color: 'white',
+                backgroundColor: '#1c4020',
+                '&:hover': {
+                  backgroundColor: '#1c3020',
+                }
+              }}
+            >
+              <ArrowLeft />Back to Search
+            </Button>
+            <Stack spacing={-3} direction="column" sx={{ marginTop: 2 }}>
+              {results.map((result, index) => (
+                <ResultCard key={index} {...result} />
+              ))}
+            </Stack>
+          </>
+        )
       }
 
       {
         querySent && (
           <Stack spacing={2} direction="row" sx={{ marginTop: 2, marginBottom: 4 }}>
             <Button
-              variant="soft"
+              variant="contained"
               aria-label="Previous Page Button"
               onClick={() => {
                 if (pagenum > 0) {
@@ -149,7 +162,7 @@ export default function Home() {
               Previous Page
             </Button>
             <Button
-              variant="soft"
+              variant="contained"
               aria-label="Next Page Button"
               onClick={() => {
                 setPagenum(pagenum + 1);
@@ -170,6 +183,6 @@ export default function Home() {
       }
 
       <Footer />
-    </Sheet >
+    </Paper >
   );
 }

@@ -1,6 +1,6 @@
-import { Typography } from "@mui/joy";
+import { Typography } from "@mui/material";
 import React from "react";
-import Link from "@mui/joy/Link";
+import Link from "@mui/material/Link";
 
 export default function Footer() {
     return (

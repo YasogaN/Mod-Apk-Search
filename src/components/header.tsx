@@ -1,28 +1,25 @@
 import * as React from 'react';
-import Card from '@mui/joy/Card';
-import Typography from '@mui/joy/Typography';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
 
 export default function Header() {
     return (
         <>
-            <Card
-                variant="soft"
-                sx={{
-                    backgroundColor: '#9df4ff',
-                    pointerEvents: 'none',
-                    userSelect: 'none',
+
+            <img
+                style={{
+                    display: 'block',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                     marginTop: '4vh',
                     marginBottom: '2vh',
-                    maxWidth: '75vh'
-                }}>
-                <img
-                    src="./logo.png"
-                    alt=""
-                />
-            </Card>
+                    pointerEvents: 'none'
+                }}
+                src="./logo.png"
+                alt=""
+            />
             <Typography
-                component="h1"
-                level="h1"
+                variant="h4"
                 m={2}
                 sx={{
                     color: 'white'
@@ -32,8 +29,7 @@ export default function Header() {
                 APK Mods Search
             </Typography>
             <Typography
-                component="p"
-                level="body-md"
+                variant='subtitle1'
                 m={2}
                 sx={{
                     color: 'white'
