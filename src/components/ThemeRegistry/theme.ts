@@ -1,5 +1,5 @@
 import { extendTheme } from '@mui/material/styles';
-import { JetBrains_Mono, Source_Code_Pro } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
 
 const jb_mono = JetBrains_Mono({
   subsets: ['latin'],
