@@ -5,8 +5,7 @@ import Link from "@mui/material/Link";
 export default function Footer() {
     return (
         <Typography
-            component="p"
-            level="title-md"
+            variant="body1"
             mt='auto'
             mb={5}
             maxWidth={'75vw'}
