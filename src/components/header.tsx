@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 export default function Header() {
     return (
         <>
-
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
                 style={{
                     display: 'block',

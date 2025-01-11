@@ -19,12 +19,14 @@ export default function Home() {
     if (querySent) {
       fetchResults();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagenum, querySent]);
 
   const fetchResults = async () => {
     setLoading(true);
     const response = await fetch(`https://customsearch.googleapis.com/customsearch/v1?key=${apiKey}&cx=752437097efb4468f&q=${query}&start=${pagenum * 10}`);
     const data = await response.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const results = data.items.map((result: any) => {
       return {
         site: result.displayLink,
